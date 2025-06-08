@@ -22,8 +22,8 @@ export default function EditProduct({ productId }) {
       try {
         // Fetch product details and categories in parallel
         const [productRes, categoryRes] = await Promise.all([
-          fetch(`http://127.0.0.1:8000/products/by-id/${productId}`),
-          fetch("http://127.0.0.1:8000/categories/categories"),
+          fetch(`https://e-shop-api-1vr0.onrender.com/products/by-id/${productId}`),
+          fetch("https://e-shop-api-1vr0.onrender.com/categories/categories"),
         ]);
 
         // Parse responses as JSON
@@ -111,7 +111,7 @@ export default function EditProduct({ productId }) {
 
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/products/product_update/${productId}`,
+        `https://e-shop-api-1vr0.onrender.com/products/product_update/${productId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

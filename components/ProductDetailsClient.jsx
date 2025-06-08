@@ -24,7 +24,7 @@ const ProductDetailsClient = ({ slug }) => {
     const fetchProduct = async () => {
       try {
         // Make GET request to the FastAPI backend using the slug
-        const res = await fetch(`http://127.0.0.1:8000/products/product?slug=${slug}`);
+        const res = await fetch(`https://e-shop-api-1vr0.onrender.com/products/product?slug=${slug}`);
         
         // Parse the JSON response
         const data = await res.json();
@@ -58,7 +58,7 @@ const ProductDetailsClient = ({ slug }) => {
 
     try {
       // Make POST request to the FastAPI wishlist endpoint
-      const res = await fetch("http://127.0.0.1:8000/wishlist/add", {
+      const res = await fetch("https://e-shop-api-1vr0.onrender.com/wishlist/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" }, // Indicate we're sending JSON
         body: JSON.stringify({

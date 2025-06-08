@@ -62,7 +62,7 @@ export default function ProfilePage() {
       setIsSaving(true);
   
       const res = await fetch(
-        `http://127.0.0.1:8000/users/update/${userInfo.id}`,
+        `https://e-shop-api-1vr0.onrender.com/users/update/${userInfo.id}`,
         {
           method: "PUT",
           headers: {

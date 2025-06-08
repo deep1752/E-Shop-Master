@@ -3,7 +3,7 @@ import AllProducts from '@/components/AllProducts'
 
 export default async function Products() {
  
-  const response = await fetch('http://127.0.0.1:8000/products/all_products', {
+  const response = await fetch('https://e-shop-api-1vr0.onrender.com/products/all_products', {
     // 'cache: no-store' ensures the data is always fresh, bypassing any cache
     cache: 'no-store',
   });

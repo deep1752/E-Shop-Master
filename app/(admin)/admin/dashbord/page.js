@@ -18,10 +18,10 @@ function ManagersHomePage() {
     async function fetchStats() {
       try {
         const [productsRes, categoriesRes, usersRes, promoRes] = await Promise.all([
-          fetch('http://127.0.0.1:8000/products/all_products'),
-          fetch('http://127.0.0.1:8000/categories/categories'),
-          fetch('http://127.0.0.1:8000/users/users'),
-          fetch('http://127.0.0.1:8000/promocode/'), // ✅ Replace with your actual promo code GET endpoint
+          fetch('https://e-shop-api-1vr0.onrender.com/products/all_products'),
+          fetch('https://e-shop-api-1vr0.onrender.com/categories/categories'),
+          fetch('https://e-shop-api-1vr0.onrender.com/users/users'),
+          fetch('https://e-shop-api-1vr0.onrender.com/promocode/'), // ✅ Replace with your actual promo code GET endpoint
         ])
         const [products, categories, users, promocodes] = await Promise.all([
           productsRes.json(),

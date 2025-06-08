@@ -47,7 +47,7 @@ export default function LoginPage() {
 
   const checkUserRoleAndRedirect = async (token) => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/users/profile", {
+      const response = await fetch("https://e-shop-api-1vr0.onrender.com/users/profile", {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -91,7 +91,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/auth/login", {
+      const response = await fetch("https://e-shop-api-1vr0.onrender.com/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

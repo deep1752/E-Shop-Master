@@ -42,7 +42,7 @@ const AllProducts = ({ allproducts }) => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/products/get_product/${slug}`
+          `https://e-shop-api-1vr0.onrender.com/products/get_product/${slug}`
         );
         if (!response.ok) throw new Error("Failed to fetch product");
         const data = await response.json();
@@ -64,7 +64,7 @@ const AllProducts = ({ allproducts }) => {
 
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/wishlist/user/${user.id}`
+          `https://e-shop-api-1vr0.onrender.com/wishlist/user/${user.id}`
         );
         const wishlist = await res.json();
         const exists = wishlist.some((item) => item.product_id === product.id);
@@ -91,7 +91,7 @@ const AllProducts = ({ allproducts }) => {
     if (isWishlisted) {
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/wishlist/wishlist/delete`,
+          `https://e-shop-api-1vr0.onrender.com/wishlist/wishlist/delete`,
           {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
@@ -119,7 +119,7 @@ const AllProducts = ({ allproducts }) => {
     } else {
       // If not in wishlist → Add it
       try {
-        const res = await fetch("http://127.0.0.1:8000/wishlist/add", {
+        const res = await fetch("https://e-shop-api-1vr0.onrender.com/wishlist/add", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

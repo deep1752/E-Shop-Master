@@ -32,7 +32,7 @@ const Cart = () => {
   
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/cart/?user_id=${userInfo.id}`,
+        `https://e-shop-api-1vr0.onrender.com/cart/?user_id=${userInfo.id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,7 +45,7 @@ const Cart = () => {
       const detailedCartItems = await Promise.all(
         cartData.map(async (item) => {
           const productRes = await fetch(
-            `http://127.0.0.1:8000/products/by-id/${item.product_id}`
+            `https://e-shop-api-1vr0.onrender.com/products/by-id/${item.product_id}`
           );
           const product = await productRes.json();
   

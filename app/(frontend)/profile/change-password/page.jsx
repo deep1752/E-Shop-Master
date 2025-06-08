@@ -32,7 +32,7 @@ export default function ChangePasswordPage() {
     const fetchProfile = async () => {
       try {
         // Make GET request to fetch user profile
-        const res = await fetch("http://127.0.0.1:8000/users/profile", {
+        const res = await fetch("https://e-shop-api-1vr0.onrender.com/users/profile", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,  // Send token in Authorization header
@@ -80,7 +80,7 @@ export default function ChangePasswordPage() {
 
       // Make PUT request to update the user's password
       const updateRes = await fetch(
-        `http://127.0.0.1:8000/users/update/${user.id}`,  // Use the user ID in the URL
+        `https://e-shop-api-1vr0.onrender.com/users/update/${user.id}`,  // Use the user ID in the URL
         {
           method: "PUT",
           headers: {

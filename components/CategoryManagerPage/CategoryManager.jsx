@@ -22,7 +22,7 @@ export default function CategoryManager() {
 
   // Fetch categories from API when component mounts
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/categories/categories")
+    fetch("https://e-shop-api-1vr0.onrender.com/categories/categories")
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -53,7 +53,7 @@ export default function CategoryManager() {
       const results = await Promise.all(
         idList.map(async (id) => {
           const res = await fetch(
-            `http://127.0.0.1:8000/categories/delete/${id}`,
+            `https://e-shop-api-1vr0.onrender.com/categories/delete/${id}`,
             { method: "DELETE" }
           );
 

@@ -23,7 +23,7 @@ export default function AdminProfile() {
       }
 
       try {
-        const response = await axios.get('http://127.0.0.1:8000/users/profile', {
+        const response = await axios.get('https://e-shop-api-1vr0.onrender.com/users/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -58,7 +58,7 @@ export default function AdminProfile() {
       };
 
       const response = await axios.put(
-        `http://127.0.0.1:8000/users/update/${adminData.id}`,
+        `https://e-shop-api-1vr0.onrender.com/users/update/${adminData.id}`,
         updatedUser,
         {
           headers: {

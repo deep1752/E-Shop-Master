@@ -22,7 +22,7 @@ export default function PromoCodeManager() {
 
   // Fetch promo code data from backend on component mount
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/promocode/")
+    fetch("https://e-shop-api-1vr0.onrender.com/promocode/")
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched promo data:", data); // Debug log
@@ -47,7 +47,7 @@ export default function PromoCodeManager() {
   const handleDelete = async (id) => {
     const confirmed = confirm("Are you sure you want to delete this promo code?");
     if (confirmed) {
-      const res = await fetch(`http://127.0.0.1:8000/promocode/delete/${id}`, {
+      const res = await fetch(`https://e-shop-api-1vr0.onrender.com/promocode/delete/${id}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -66,7 +66,7 @@ export default function PromoCodeManager() {
     if (confirmed) {
       const results = await Promise.all(
         selectedIds.map((id) =>
-          fetch(`http://127.0.0.1:8000/promocode/delete/${id}`, {
+          fetch(`https://e-shop-api-1vr0.onrender.com/promocode/delete/${id}`, {
             method: "DELETE",
           })
         )

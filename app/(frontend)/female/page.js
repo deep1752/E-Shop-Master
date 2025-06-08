@@ -4,7 +4,7 @@ import AllProducts from "@/components/AllProducts";
 // async function
 export default async function Female() {
   
-  const response = await fetch('http://127.0.0.1:8000/products/all_products?category=female');
+  const response = await fetch('https://e-shop-api-1vr0.onrender.com/products/all_products?category=female');
 
   // Convert the response to JSON
   const data = await response.json(); 

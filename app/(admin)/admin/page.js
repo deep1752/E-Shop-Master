@@ -34,10 +34,10 @@ export default function LoginPage() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post("http://127.0.0.1:8000/auth/login", data);
+      const res = await axios.post("https://e-shop-api-1vr0.onrender.com/auth/login", data);
       const token = res.data.access_token;
 
-      const profile = await axios.get("http://127.0.0.1:8000/users/profile", {
+      const profile = await axios.get("https://e-shop-api-1vr0.onrender.com/users/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
 

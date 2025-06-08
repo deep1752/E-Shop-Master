@@ -16,7 +16,7 @@ export default function EditUser({ userId }) {
     if (!userId) return; // If no userId is provided, don't fetch user data
 
     // Fetch user data from the backend API using the provided userId
-    fetch(`http://127.0.0.1:8000/users/users?user_id=${userId}`)
+    fetch(`https://e-shop-api-1vr0.onrender.com/users/users?user_id=${userId}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch user"); // Throw error if the request fails
         return res.json(); // Parse the response body as JSON
@@ -101,7 +101,7 @@ export default function EditUser({ userId }) {
 
     try {
       // Send the updated user data to the backend API
-      const res = await fetch(`http://127.0.0.1:8000/users/update/${userId}`, {
+      const res = await fetch(`https://e-shop-api-1vr0.onrender.com/users/update/${userId}`, {
         method: "PUT", // HTTP method is PUT for updating
         headers: { "Content-Type": "application/json" }, // Set content type as JSON
         body: JSON.stringify(formData), // Send form data as JSON in the body

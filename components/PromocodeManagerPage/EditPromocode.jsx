@@ -16,7 +16,7 @@ export default function EditPromoCode({ promoId }) {
     if (!promoId) return
 
     // Fetch the promo code data by ID from the FastAPI backend
-    fetch(`http://127.0.0.1:8000/promocode/?promo_id=${promoId}`)
+    fetch(`https://e-shop-api-1vr0.onrender.com/promocode/?promo_id=${promoId}`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch promo code')
         return res.json()
@@ -91,7 +91,7 @@ export default function EditPromoCode({ promoId }) {
 
     // Attempt to update the promo code via API
     try {
-      const res = await fetch(`http://127.0.0.1:8000/promocode/update/${promoId}`, {
+      const res = await fetch(`https://e-shop-api-1vr0.onrender.com/promocode/update/${promoId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
