@@ -1,36 +1,33 @@
-"use client"; // Ensures this component is client-side
+"use client";
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import AdminWithAuth from "@/components/AdminWithAuth";
 
-export default function EditPromoCode({ promoId }) {
-  // Local state for form data, loading status, and validation errors
-  const [formData, setFormData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [errors, setErrors] = useState({})
-  const router = useRouter()
+function EditPromoCodePage({ params }) {
+  const { id } = params;
+  const [formData, setFormData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState({});
+  const router = useRouter();
 
-  // Fetch promo code details when the component mounts or promoId changes
   useEffect(() => {
-    if (!promoId) return
+    if (!id) return;
 
-    // Fetch the promo code data by ID from the FastAPI backend
-    fetch(`https://e-shop-api-1vr0.onrender.com/promocode/?promo_id=${promoId}`)
+    fetch(`https://e-shop-api-1vr0.onrender.com/promocode/?promo_id=${id}`)
       .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch promo code')
-        return res.json()
+        if (!res.ok) throw new Error('Failed to fetch promo code');
+        return res.json();
       })
       .then(data => {
-        const promo = data[0] // Assumes the response is an array with a single object
+        const promo = data[0];
         if (!promo) {
-          toast.error('Promo code not found!')
-
-          setLoading(false)
-          return
+          toast.error('Promo code not found!');
+          setLoading(false);
+          return;
         }
 
-        // Set form data with the fetched promo code values
         setFormData({
           name: promo.name || '',
           description: promo.description || '',
@@ -38,157 +35,114 @@ export default function EditPromoCode({ promoId }) {
           discount_value: promo.discount_value || 1,
           expiry_date: promo.expiry_date || '',
           status: promo.status || 'active'
-        })
-        setLoading(false)
+        });
+        setLoading(false);
       })
       .catch(err => {
-        console.error('Error fetching promo code:', err)
-        toast.error('Failed to load promo code.')
+        console.error('Error fetching promo code:', err);
+        toast.error('Failed to load promo code.');
+        setLoading(false);
+      });
+  }, [id]);
 
-        setLoading(false)
-      })
-  }, [promoId])
-
-  // Handle input changes and update form data
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
-  // Validate form fields before submission
-  const validate = () => {
-    const errs = {}
-
-    if (!formData.name.trim()) errs.name = 'Name is required.'
-    if (!formData.discount_value || formData.discount_value < 1)
-      errs.discount_value = 'Discount value must be at least 1.'
-
-    // Additional check for percentage type
-    if (formData.discount_type === 'percentage' && formData.discount_value > 100) {
-      errs.discount_value = 'Percentage cannot exceed 100.'
-    }
-
-    const today = new Date().toISOString().split('T')[0]
-    if (!formData.expiry_date || formData.expiry_date < today) {
-      toast.error('❌ Expiry date must be in the future.')
-    }
-
-    return errs
-  }
-
-  // Submit the updated promo code to the backend
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    // Basic date check
-    const today = new Date().toISOString().split("T")[0]
+    const today = new Date().toISOString().split("T")[0];
     if (formData.expiry_date < today) {
-      
-      toast.error("❌ Expiry date must be in the future.")
-
-      return
+      toast.error("❌ Expiry date must be in the future.");
+      return;
     }
 
-    // Attempt to update the promo code via API
     try {
-      const res = await fetch(`https://e-shop-api-1vr0.onrender.com/promocode/update/${promoId}`, {
+      const res = await fetch(`https://e-shop-api-1vr0.onrender.com/promocode/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(formData)
-      })
+      });
 
       if (res.ok) {
-        toast.success("Promo code updated successfully!")
-
-        router.push("/admin/promocode") // Redirect to promo list page
+        toast.success("Promo code updated successfully!");
+        router.push("/admin/promocode");
       } else {
-        toast.error("Failed to update promo code.")
-
+        toast.error("Failed to update promo code.");
       }
     } catch (error) {
-      toast.error("Something went wrong!")
-
+      toast.error("Something went wrong!");
     }
-  }
+  };
 
-  // Show a loading state while fetching data
   if (loading) {
     return (
-      <div className="loader-container">
-        <p className="loader-text">🔄 Loading promo code...</p>
+      <div className="flex justify-center items-center h-64">
+        <p className="text-lg">🔄 Loading promo code...</p>
       </div>
-    )
+    );
   }
 
-  // If no form data was fetched
-  if (!formData) return <p className="text-red-500">❌ Failed to load promo code data.</p>
+  if (!formData) return <p className="text-red-500 text-center py-10">❌ Failed to load promo code data.</p>;
 
-  // Main form UI
   return (
-    <form onSubmit={handleSubmit} className="edit-form">
-      {/* Back Button */}
-      <button
-        type="button"
-        onClick={() => router.push('/admin/promocode')}
-        className="back-btn"
-      >
-        ◀ Back
-      </button>
+    <div className="container mx-auto px-4 py-8">
+      <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 max-w-3xl mx-auto">
+        <button
+          type="button"
+          onClick={() => router.push('/admin/promocode')}
+          className="mb-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          ◀ Back
+        </button>
 
-      {/* Editable Table Form */}
-      <table className="edit-table">
-        <tbody>
-          {/* Promo Code Name */}
-          <tr className="edit-row">
-            <td className="edit-label">Name</td>
-            <td className="edit-input-cell">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="edit-input"
-                required
-              />
-              {errors.name && <p className="text-red-500">{errors.name}</p>}
-            </td>
-          </tr>
+        <h1 className="text-2xl font-bold mb-6">Edit Promo Code</h1>
 
-          {/* Description */}
-          <tr className="edit-row">
-            <td className="edit-label">Description</td>
-            <td className="edit-input-cell">
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                className="edit-input"
-              />
-            </td>
-          </tr>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+          </div>
 
-          {/* Discount Type */}
-          <tr className="edit-row">
-            <td className="edit-label">Discount Type</td>
-            <td className="edit-input-cell">
+          <div>
+            <label className="block text-sm font-medium mb-1">Description</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              rows={3}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Discount Type</label>
               <select
                 name="discount_type"
                 value={formData.discount_type}
                 onChange={handleChange}
-                className="edit-input"
+                className="w-full p-2 border rounded"
               >
                 <option value="percentage">Percentage</option>
                 <option value="fixed">Fixed</option>
               </select>
-            </td>
-          </tr>
+            </div>
 
-          {/* Discount Value */}
-          <tr className="edit-row">
-            <td className="edit-label">Discount Value</td>
-            <td className="edit-input-cell">
+            <div>
+              <label className="block text-sm font-medium mb-1">Discount Value</label>
               <input
                 type="number"
                 name="discount_value"
@@ -196,53 +150,56 @@ export default function EditPromoCode({ promoId }) {
                 min="1"
                 max={formData.discount_type === 'percentage' ? 100 : undefined}
                 onChange={handleChange}
-                className="edit-input"
+                className="w-full p-2 border rounded"
                 required
               />
-              {errors.discount_value && <p className="text-red-500">{errors.discount_value}</p>}
-            </td>
-          </tr>
+              {errors.discount_value && <p className="text-red-500 text-sm">{errors.discount_value}</p>}
+            </div>
+          </div>
 
-          {/* Expiry Date */}
-          <tr className="edit-row">
-            <td className="edit-label">Expiry Date</td>
-            <td className="edit-input-cell">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Expiry Date</label>
               <input
                 type="date"
                 name="expiry_date"
                 value={formData.expiry_date}
                 onChange={handleChange}
-                className="edit-input"
+                className="w-full p-2 border rounded"
                 required
               />
-              {errors.expiry_date && <p className="text-red-500">{errors.expiry_date}</p>}
-            </td>
-          </tr>
+              {errors.expiry_date && <p className="text-red-500 text-sm">{errors.expiry_date}</p>}
+            </div>
 
-          {/* Status Dropdown */}
-          <tr className="edit-row">
-            <td className="edit-label">Status</td>
-            <td className="edit-input-cell">
+            <div>
+              <label className="block text-sm font-medium mb-1">Status</label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="edit-input"
+                className="w-full p-2 border rounded"
               >
                 <option value="active">Active</option>
                 <option value="non_active">Non-active</option>
               </select>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
+          </div>
+        </div>
 
-      {/* Submit Button */}
-      <div className="edit-submit-container">
-        <button type="submit" className="edit-submit-button">
-          Update Promo Code
-        </button>
-      </div>
-    </form>
-  )
+        <div className="mt-6">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Update Promo Code
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 }
+
+export default AdminWithAuth(EditPromoCodePage);
+
+
+
