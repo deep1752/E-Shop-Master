@@ -1604,3 +1604,117 @@ body {
   color: #888;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* promocode edit  */
+
+.promo-edit-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.promo-edit-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.promo-edit-table th {
+  text-align: left;
+  padding: 10px;
+  vertical-align: top;
+  width: 30%;
+}
+
+.promo-edit-table td {
+  padding: 10px;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  border: none;
+}
+
+.btn.primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.btn.primary:hover {
+  background-color: #1e40af;
+}
+
+.btn.secondary {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.btn.secondary:hover {
+  background-color: #e5e7eb;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.form-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+
+
+
