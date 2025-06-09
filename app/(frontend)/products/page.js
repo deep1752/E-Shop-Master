@@ -6,7 +6,7 @@ import AllProducts from '@/components/AllProducts'
 
 export default async function Products() {
  
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/all_products`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/all_products`, {
     // 'cache: no-store' ensures the data is always fresh, bypassing any cache
     cache: 'no-store',
   });
