@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"; // 👈 this disables static rendering
+export const fetchCache = "force-no-store"; // optional: disables fetch caching
 
 import React from 'react';
 
