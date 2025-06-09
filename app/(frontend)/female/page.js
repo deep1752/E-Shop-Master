@@ -1,26 +1,34 @@
+// app/(frontend)/female/page.js
+export const dynamic = "force-dynamic"; // 👈 this disables static rendering
+export const fetchCache = "force-no-store"; // optional: disables fetch caching
+
 import React from 'react';
-import AllProducts from "@/components/AllProducts"; 
+import AllProducts from "@/components/AllProducts";
 
-// async function
 export default async function Female() {
-  
-  const response = await fetch('https://e-shop-api-1vr0.onrender.com/products/all_products?category=female');
+  try {
+    const response = await fetch('https://e-shop-api-1vr0.onrender.com/products/all_products?category=female');
+    const data = await response.json();
 
-  // Convert the response to JSON
-  const data = await response.json(); 
+    if (!Array.isArray(data)) {
+      return <p>No products available.</p>;
+    }
 
-  // If the API doesn't return an array, show a fallback message
-  if (!Array.isArray(data)) {
-    return <p>No products available.</p>;
+    return (
+      <div className='Allproducts-container'>
+        {data.map((prod) => (
+          <AllProducts key={prod.id} allproducts={prod} />
+        ))}
+      </div>
+    );
+  } catch (error) {
+    console.error("❌ Failed to load female products:", error);
+    return <p className="text-red-500">❌ Failed to load products. Please try again later.</p>;
   }
-
-  // Render the product list using AllProducts component for each product
-  return (
-    <div className='Allproducts-container'>
-      {data.map(prod => (
-        // Render each product with a unique key (using product ID)
-        <AllProducts key={prod.id} allproducts={prod} />
-      ))}
-    </div>
-  );
 }
+
+
+
+// git add .
+// git commit -m "feat: updated EditPromoCode page with global CSS and aligned update button to right"
+// git push origin main
