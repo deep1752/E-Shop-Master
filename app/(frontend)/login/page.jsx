@@ -13,7 +13,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useUserContext } from "@/context/UserContext";
-import { jwtDecode } from "jwt-decode";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -22,51 +21,14 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   const router = useRouter();
-  const [token, setToken] = useState(null);
-  const { refreshUserInfo } = useUserContext();
+  const { userInfo, loading, refreshUserInfo } = useUserContext();
+  const [isCheckingRole, setIsCheckingRole] = useState(false);
 
-  // Auto-redirect user to profile if already logged in (and is customer)
+  // Redirect only after userInfo is loaded and confirmed as customer
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      try {
-        const decoded = jwtDecode(storedToken);
-        const userName = decoded?.name || decoded?.sub || "User";
-        localStorage.setItem("userName", userName);
-        setToken(storedToken);
-        
-        // Check if user is customer before redirecting
-        checkUserRoleAndRedirect(storedToken);
-      } catch (error) {
-        console.error("Invalid token:", error);
-        localStorage.removeItem("token");
-        localStorage.removeItem("userName");
-      }
-    }
-  }, [router]);
+    if (loading || isCheckingRole) return;
 
-  const checkUserRoleAndRedirect = async (token) => {
-    try {
-      const response = await fetch("https://e-shop-api-1vr0.onrender.com/users/profile", {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch user profile");
-      }
-
-      const userData = await response.json();
-      
-      if (userData.role !== "customer") {
-        toast.error("Only customer accounts are allowed to login");
-        localStorage.removeItem("token");
-        localStorage.removeItem("userName");
-        return;
-      }
-
-      // User is a customer, proceed with redirect
+    if (userInfo?.role === "customer") {
       const wishlistSlug = localStorage.getItem("wishlist_redirect");
       if (wishlistSlug) {
         localStorage.removeItem("wishlist_redirect");
@@ -74,11 +36,8 @@ export default function LoginPage() {
       } else {
         router.push("/profile");
       }
-    } catch (error) {
-      console.error("Error checking user role:", error);
-      toast.error("Error verifying your account type");
     }
-  };
+  }, [userInfo, loading, isCheckingRole, router]);
 
   const {
     register,
@@ -91,7 +50,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch("https://e-shop-api-1vr0.onrender.com/auth/login", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -108,11 +67,9 @@ export default function LoginPage() {
 
       if (accessToken) {
         localStorage.setItem("token", accessToken);
-        setToken(accessToken);
+        setIsCheckingRole(true);
         await refreshUserInfo();
-        
-        // After login, verify user role before proceeding
-        await checkUserRoleAndRedirect(accessToken);
+        setIsCheckingRole(false);
       } else {
         toast.error("No access token received.");
       }
@@ -125,7 +82,6 @@ export default function LoginPage() {
       toast.error(error.message || "Something went wrong!");
     }
   };
-
   return (
     <div className="min-h-[60vh] flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-200 p-4">
       <Card className="w-full max-w-md shadow-xl rounded-2xl border border-gray-200">

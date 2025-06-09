@@ -21,7 +21,7 @@ export default function ProductManager({ onEdit, onAdd }) {
 
   // Fetch products from the backend on component mount
   useEffect(() => {
-    fetch("https://e-shop-api-1vr0.onrender.com/products/all_products")
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/all_products`)
       .then((res) => res.json())
       .then((data) => {
         // Sort products by most recently updated or created

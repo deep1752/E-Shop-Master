@@ -22,8 +22,8 @@ export default function EditProduct({ productId }) {
       try {
         // Fetch product details and categories in parallel
         const [productRes, categoryRes] = await Promise.all([
-          fetch(`https://e-shop-api-1vr0.onrender.com/products/by-id/${productId}`),
-          fetch("https://e-shop-api-1vr0.onrender.com/categories/categories"),
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/by-id/${productId}`),
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/categories`),
         ]);
 
         // Parse responses as JSON
@@ -111,7 +111,7 @@ export default function EditProduct({ productId }) {
 
     try {
       const res = await fetch(
-        `https://e-shop-api-1vr0.onrender.com/products/product_update/${productId}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/product_update/${productId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

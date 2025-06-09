@@ -34,10 +34,10 @@ export default function LoginPage() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post("https://e-shop-api-1vr0.onrender.com/auth/login", data);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`, data);
       const token = res.data.access_token;
 
-      const profile = await axios.get("https://e-shop-api-1vr0.onrender.com/users/profile", {
+      const profile = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

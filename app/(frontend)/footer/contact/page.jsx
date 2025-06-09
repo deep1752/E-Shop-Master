@@ -19,7 +19,7 @@ export default function ContactPage() {
   const onSubmit = async (data) => {
     try {
       // Send form data to FastAPI backend
-      const res = await fetch('https://e-shop-api-1vr0.onrender.com/contact/', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/contact/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data), // Convert form data to JSON

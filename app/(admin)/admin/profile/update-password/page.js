@@ -47,7 +47,7 @@ export default function ChangePassword() {
       setLoading(true);
       const token = localStorage.getItem('admin_token');
       await axios.put(
-        `https://e-shop-api-1vr0.onrender.com/users/update/${admin.id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/update/${admin.id}`,
         {
           name: admin.name,
           email: admin.email,

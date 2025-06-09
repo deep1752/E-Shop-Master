@@ -17,7 +17,7 @@ const WishlistPage = () => {
 
       try {
         // First fetch the current user's profile to get user ID
-        const profileRes = await fetch("https://e-shop-api-1vr0.onrender.com/users/profile", {
+        const profileRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`, {
           headers: { Authorization: `Bearer ${token}` }, // Send token in Authorization header
         });
         const profileData = await profileRes.json();
@@ -29,7 +29,7 @@ const WishlistPage = () => {
 
         // Then fetch wishlist items using the user's ID
         const res = await fetch(
-          `https://e-shop-api-1vr0.onrender.com/wishlist/user/${profileData.id}`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/user/${profileData.id}`
         );
         const data = await res.json();
 
@@ -39,7 +39,7 @@ const WishlistPage = () => {
             data.map(async (item) => {
               try {
                 const productRes = await fetch(
-                  `https://e-shop-api-1vr0.onrender.com/products/by-id/${item.product_id}`
+                  `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/by-id/${item.product_id}`
                 );
                 const productData = await productRes.json();
                 return {
@@ -73,7 +73,7 @@ const WishlistPage = () => {
   // Function to remove a wishlist item by ID
   const handleRemove = async (id) => {
     try {
-      await fetch(`https://e-shop-api-1vr0.onrender.com/wishlist/delete/${id}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/delete/${id}`, {
         method: "DELETE", 
       });
       // Filter out the removed item from both local and context state

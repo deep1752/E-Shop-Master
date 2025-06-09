@@ -62,7 +62,7 @@ export default function ProfilePage() {
       setIsSaving(true);
   
       const res = await fetch(
-        `https://e-shop-api-1vr0.onrender.com/users/update/${userInfo.id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/update/${userInfo.id}`,
         {
           method: "PUT",
           headers: {

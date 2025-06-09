@@ -23,7 +23,7 @@ export default function EditCategory({ categoryId }) {
     if (!categoryId) return
 
     // Fetch category data from FastAPI backend
-    fetch(`https://e-shop-api-1vr0.onrender.com/categories/categories?category_id=${categoryId}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/categories?category_id=${categoryId}`)
       .then(res => {
         // If the response is not OK, throw an error
         if (!res.ok) throw new Error('Failed to fetch category')
@@ -54,7 +54,7 @@ export default function EditCategory({ categoryId }) {
 
     try {
       // Send updated data to backend via PUT request
-      const res = await fetch(`https://e-shop-api-1vr0.onrender.com/categories/category_update/${categoryId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/category_update/${categoryId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

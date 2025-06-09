@@ -7,7 +7,7 @@ import AllProducts from "@/components/AllProducts";
 export default async function Male() {  
     
    
-    const response = await fetch('https://e-shop-api-1vr0.onrender.com/products/all_products?category=male');
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/all_products?category=male`);
 
     
     const data = await response.json(); 

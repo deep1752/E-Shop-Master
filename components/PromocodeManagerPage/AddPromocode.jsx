@@ -127,7 +127,7 @@ export default function AddPromoCode() {
       setIsLoading(true); // Show loader
 
       // Send promo data to backend
-      const res = await fetch("https://e-shop-api-1vr0.onrender.com/promocode/add", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/promocode/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(promos),

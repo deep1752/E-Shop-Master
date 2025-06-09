@@ -111,7 +111,7 @@ export default function AddUser() {
     try {
       // Loop through each user and submit their data to the API
       for (const user of users) {
-        const res = await fetch("https://e-shop-api-1vr0.onrender.com/auth/register", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(user),

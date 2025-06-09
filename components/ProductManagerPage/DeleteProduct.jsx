@@ -1,6 +1,6 @@
 export async function deleteProductById(id) {
   try {
-    const res = await fetch(`https://e-shop-api-1vr0.onrender.com/products/delete/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/delete/${id}`, {
       method: 'DELETE'
     })
     if (res.ok) {

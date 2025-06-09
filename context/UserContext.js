@@ -2,101 +2,72 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-// Create a context to hold and provide user-related data globally
 const Context = createContext();
 
-// UserContext component to wrap your application and provide user data
 export const UserContext = ({ children }) => {
- 
   const [userInfo, setUserInfo] = useState(null);
-
- 
   const [loading, setLoading] = useState(true);
-
-  
   const [error, setError] = useState(null);
 
-  // State to store the token from localStorage
-  const [token, setToken] = useState(null);
-
-  // Get token from localStorage when component mounts
-  useEffect(() => {
-    // Only run this in the browser (window exists)
-    const storedToken =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
-    if (storedToken) {
-      setToken(storedToken); // Set the token if found
-    } else {
-      setLoading(false); // If no token, stop loading immediately
-    }
-  }, []);
-
-  // Function to fetch the current user's profile from the backend
-  const fetchProfile = async (overrideToken) => {
-    const authToken = overrideToken || token; // Use override token if provided
-
-    // If there's no token, clear the user state and stop loading
-    if (!authToken) {
+  const fetchProfile = async (token) => {
+    if (!token) {
       setUserInfo(null);
-      setError(null);
       setLoading(false);
       return;
     }
 
     try {
-      setLoading(true); // Start loading while fetching
-
-      const res = await fetch("http://127.0.0.1:8000/users/profile", {
+      setLoading(true);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`, {
         headers: {
-          Authorization: `Bearer ${authToken}`, // Auth header with token
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
 
-      const data = await res.json(); // Parse the response JSON
+      const data = await res.json();
 
-      // If response is not OK, throw an error to be caught
       if (!res.ok) {
         throw new Error(data.detail || "Failed to fetch profile.");
       }
 
-      setUserInfo(data); // Set the fetched user profile
-      setError(null); // Clear any previous errors
-    } catch (err) {
-      console.warn("Profile fetch failed:", err.message);
-
-      // If token is invalid, clear it from localStorage
-      if (err.message === "Could not validate credentials") {
+      // Verify user role here
+      if (data.role !== "customer") {
         localStorage.removeItem("token");
-        setToken(null);
+        throw new Error("Only customer accounts are allowed");
       }
 
-      setUserInfo(null); // Clear any existing user info
-      setError(err.message || "Something went wrong."); // Set error
+      setUserInfo(data);
+      setError(null);
+    } catch (err) {
+      console.warn("Profile fetch failed:", err.message);
+      setUserInfo(null);
+      setError(err.message || "Something went wrong.");
     } finally {
-      setLoading(false); // Done fetching
+      setLoading(false);
     }
   };
 
-  // Automatically fetch profile whenever token changes
   useEffect(() => {
-    if (token) {
-      fetchProfile(token);
+    const storedToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (storedToken) {
+      fetchProfile(storedToken);
+    } else {
+      setLoading(false);
     }
-  }, [token]);
+  }, []);
 
   return (
-    // Provide user-related values to all children components
     <Context.Provider
       value={{
-        userInfo,                // The current logged-in user's profile
-        setUserInfo,             // Function to manually update userInfo
-        loading,                 // Whether the user profile is being loaded
-        error,                   // Any error that occurred during fetch
-        setLoading,              // Allow manual control of loading state
-        refreshUserInfo: () => fetchProfile(token), // Refetch user profile manually
-        setToken,                // Allow updating token (e.g. after login)
+        userInfo,
+        setUserInfo,
+        loading,
+        error,
+        refreshUserInfo: () => {
+          const token = localStorage.getItem("token");
+          return fetchProfile(token);
+        },
       }}
     >
       {children}
@@ -104,5 +75,4 @@ export const UserContext = ({ children }) => {
   );
 };
 
-// Custom hook to access the UserContext easily
 export const useUserContext = () => useContext(Context);

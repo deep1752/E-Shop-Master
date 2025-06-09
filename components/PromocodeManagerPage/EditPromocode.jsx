@@ -15,7 +15,7 @@ function EditPromoCodePage({ params }) {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`https://e-shop-api-1vr0.onrender.com/promocode/?promo_id=${id}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/promocode/?promo_id=${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch promo code');
         return res.json();
@@ -60,7 +60,7 @@ function EditPromoCodePage({ params }) {
     }
 
     try {
-      const res = await fetch(`https://e-shop-api-1vr0.onrender.com/promocode/update/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/promocode/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"

@@ -34,7 +34,7 @@ export default function AddProduct() {
   // Fetch product categories when the component mounts
   useEffect(() => {
     setIsLoading(true);
-    fetch("https://e-shop-api-1vr0.onrender.com/categories/categories")
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/categories`)
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch((err) => console.error("Failed to load categories", err))
@@ -125,7 +125,7 @@ export default function AddProduct() {
     try {
       setIsLoading(true);
 
-      const res = await fetch("https://e-shop-api-1vr0.onrender.com/products/add", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(cleanProducts),

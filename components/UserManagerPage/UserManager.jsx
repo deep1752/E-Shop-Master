@@ -21,7 +21,7 @@ export default function UserManager({ onEdit, onAdd }) {
 
   // Fetch users data from backend API on component mount
   useEffect(() => {
-    fetch("https://e-shop-api-1vr0.onrender.com/users/users")
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/users`)
       .then((res) => res.json())
       .then((data) => {
         setUsers(data); // Store fetched data in the users state
@@ -45,7 +45,7 @@ export default function UserManager({ onEdit, onAdd }) {
     try {
       // Map over the selected user IDs and send a DELETE request for each
       const deleteRequests = idList.map((id) =>
-        fetch(`https://e-shop-api-1vr0.onrender.com/users/delete/${id}`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/delete/${id}`, {
           method: "DELETE",
         })
       );

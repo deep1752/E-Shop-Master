@@ -36,7 +36,7 @@ const ProductPage = () => {
 
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://e-shop-api-1vr0.onrender.com/products/get_product/${slug}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/get_product/${slug}`);
         if (!response.ok) throw new Error("Failed to fetch product");
         const data = await response.json();
         setProduct(data);  // Store the product data in the state.
@@ -56,7 +56,7 @@ const ProductPage = () => {
       if (!user?.id || !product?.id) return;
 
       try {
-        const res = await fetch(`https://e-shop-api-1vr0.onrender.com/wishlist/user/${user.id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/user/${user.id}`);
         const wishlist = await res.json();
         const exists = wishlist.some((item) => item.product_id === product.id);
         setIsWishlisted(exists);
@@ -80,7 +80,7 @@ const ProductPage = () => {
     // If the product is already in the wishlist, remove it.
     if (isWishlisted) {
       try {
-        const res = await fetch(`https://e-shop-api-1vr0.onrender.com/wishlist/wishlist/delete`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/wishlist/delete`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -103,7 +103,7 @@ const ProductPage = () => {
     } else {
       // If the product is not in the wishlist, add it.
       try {
-        const res = await fetch("https://e-shop-api-1vr0.onrender.com/wishlist/add", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/add`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -145,7 +145,7 @@ const ProductPage = () => {
       if (!user?.id || !product?.id) return;
 
       try {
-        const res = await fetch(`https://e-shop-api-1vr0.onrender.com/cart/?user_id=${user.id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/?user_id=${user.id}`);
         const cartItems = await res.json();
         const exists = cartItems.some((item) => item.product_id === product.id);
         setIsInCart(exists);

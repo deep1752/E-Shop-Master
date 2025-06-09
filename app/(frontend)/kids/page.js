@@ -8,7 +8,7 @@ import AllProducts from "@/components/AllProducts";
 // Define an asynchronous React component for the "Kids" products page
 export default async function Kids() {
     
-    const response = await fetch('https://e-shop-api-1vr0.onrender.com/products/all_products?category=kids');
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/all_products?category=kids`);
 
     const data = await response.json(); 
 

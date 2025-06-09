@@ -32,7 +32,7 @@ const Cart = () => {
   
     try {
       const response = await fetch(
-        `https://e-shop-api-1vr0.onrender.com/cart/?user_id=${userInfo.id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/?user_id=${userInfo.id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,7 +45,7 @@ const Cart = () => {
       const detailedCartItems = await Promise.all(
         cartData.map(async (item) => {
           const productRes = await fetch(
-            `https://e-shop-api-1vr0.onrender.com/products/by-id/${item.product_id}`
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/products/by-id/${item.product_id}`
           );
           const product = await productRes.json();
   

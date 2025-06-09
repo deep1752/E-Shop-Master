@@ -90,7 +90,7 @@ export default function AddCategory() {
 
       // Submit each category to the backend
       for (const category of categories) {
-        const res = await fetch("https://e-shop-api-1vr0.onrender.com/categories/add/", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}.com/categories/add/`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
