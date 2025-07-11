@@ -7,14 +7,14 @@ import {
   AiOutlineHeart,
   AiFillHeart,
 } from "react-icons/ai";
-import { CgShoppingCart } from "react-icons/cg";  // Import shopping cart icon.
+import { CgShoppingCart } from "react-icons/cg";  
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useStateContext } from "@/context/StateContext";
 import { useUserContext } from "@/context/UserContext";
 import { toast } from "sonner";
 
 const ProductPage = () => {
-  const { slug } = useParams();  // Get the `slug` from the URL params.
+  const { slug } = useParams();  
   const searchParams = useSearchParams();  // Access search parameters from the URL.
   const addToWishlist = searchParams.get("addToWishlist");  // Check if the "addToWishlist" param is present in the URL.
 
