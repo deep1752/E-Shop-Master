@@ -36,7 +36,7 @@ const ProductPage = () => {
 
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/get_product/${slug}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/get_product/${slug}`);
         if (!response.ok) throw new Error("Failed to fetch product");
         const data = await response.json();
         setProduct(data);  // Store the product data in the state.
@@ -224,3 +224,9 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+
+
+
+
+
+

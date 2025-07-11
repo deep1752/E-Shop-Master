@@ -1,40 +1,38 @@
-"use client"; 
+"use client";
 
-import React, { useEffect, useState } from "react"; 
-import Link from "next/link"; 
-import { toast } from "sonner"; 
-import { CgShoppingCart } from "react-icons/cg"; 
-import { useStateContext } from "@/context/StateContext"; 
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { toast } from "sonner";
+import { CgShoppingCart } from "react-icons/cg";
+import { useStateContext } from "@/context/StateContext";
 
 const WishlistPage = () => {
-  const [wishlist, setWishlist] = useState([]); // Local state to store wishlist items
-  const { wishlistItems, setWishlistItems, onAdd } = useStateContext(); 
+  const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(true); // ✅ Loader state
+  const { wishlistItems, setWishlistItems, onAdd } = useStateContext();
 
   useEffect(() => {
-
     const fetchWishlist = async () => {
-      const token = localStorage.getItem("token"); // Get token from local storage for authentication
+      const token = localStorage.getItem("token");
 
       try {
-        // First fetch the current user's profile to get user ID
         const profileRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/profile`, {
-          headers: { Authorization: `Bearer ${token}` }, // Send token in Authorization header
+          headers: { Authorization: `Bearer ${token}` },
         });
         const profileData = await profileRes.json();
 
         if (!profileData.id) {
-          toast.error("Failed to retrieve user profile"); 
+          toast.error("Failed to retrieve user profile");
+          setLoading(false);
           return;
         }
 
-        // Then fetch wishlist items using the user's ID
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/user/${profileData.id}`
         );
         const data = await res.json();
 
         if (Array.isArray(data)) {
-          // For each wishlist item, fetch full product details using product_id
           const enrichedWishlist = await Promise.all(
             data.map(async (item) => {
               try {
@@ -44,39 +42,38 @@ const WishlistPage = () => {
                 const productData = await productRes.json();
                 return {
                   ...item,
-                  product: productData, // Add product details to wishlist item
+                  product: productData,
                 };
               } catch {
-                return item; // If fetching product fails, return original item
+                return item;
               }
             })
           );
-          setWishlist(enrichedWishlist); // Update local wishlist state
-          setWishlistItems(enrichedWishlist); // Update global wishlist state in context
+
+          setWishlist(enrichedWishlist);
+          setWishlistItems(enrichedWishlist);
         } else {
-          // Handle unexpected data structure
           console.error("Wishlist is not an array:", data);
           toast.error("Unexpected data format for wishlist");
           setWishlist([]);
         }
       } catch (err) {
-        // Handle network or other errors
         console.error("Error fetching wishlist:", err);
         toast.error("Failed to fetch wishlist");
         setWishlist([]);
+      } finally {
+        setLoading(false); // ✅ Hide loader in all cases
       }
     };
 
-    fetchWishlist(); // Call the async function
-  }, [setWishlistItems]); // Dependency: re-run if setWishlistItems changes
+    fetchWishlist();
+  }, [setWishlistItems]);
 
-  // Function to remove a wishlist item by ID
   const handleRemove = async (id) => {
     try {
       await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/delete/${id}`, {
-        method: "DELETE", 
+        method: "DELETE",
       });
-      // Filter out the removed item from both local and context state
       setWishlist((prev) => prev.filter((item) => item.id !== id));
       setWishlistItems((prev) => prev.filter((item) => item.id !== id));
       toast.success("Removed from wishlist");
@@ -86,20 +83,24 @@ const WishlistPage = () => {
     }
   };
 
-  // Function to move a product from wishlist to cart
   const handleMoveToCart = (product, wishlistId) => {
-    onAdd(product, 1); // Add one unit of the product to cart using context
-    handleRemove(wishlistId); 
+    onAdd(product, 1);
+    handleRemove(wishlistId);
     toast.success("Moved to cart");
   };
 
   return (
     <div className="wishlist-list">
-      {wishlist.length > 0 ? ( // Check if there are wishlist items
+      {/* ✅ Show loader */}
+      {loading ? (
+        <div className="text-center py-16 text-blue-600 font-semibold text-lg">
+          Loading wishlist...
+        </div>
+      ) : wishlist.length > 0 ? (
         wishlist.map((item) => (
           <div key={item.id} className="wishlist-item">
             <img
-              src={item.product?.image || "/placeholder.png"} // Fallback image if none
+              src={item.product?.image || "/placeholder.png"}
               alt={item.product?.name || "Product"}
               className="wishlist-image"
             />
@@ -107,7 +108,6 @@ const WishlistPage = () => {
               <h2 className="wishlist-title">{item.product?.name}</h2>
               <p className="wishlist-price">₹{item.product?.net_price}</p>
               <div className="wishlist-actions">
-                {/* Button to move item to cart */}
                 <button
                   onClick={() => handleMoveToCart(item.product, item.id)}
                   className="btn-move"
@@ -115,7 +115,6 @@ const WishlistPage = () => {
                   <CgShoppingCart />
                   Move to Cart
                 </button>
-                {/* Button to remove item from wishlist */}
                 <button
                   onClick={() => handleRemove(item.id)}
                   className="btn-remove"
@@ -127,7 +126,6 @@ const WishlistPage = () => {
           </div>
         ))
       ) : (
-        // If wishlist is empty, show a message and a button to browse products
         <div className="empty-wishlist-container">
           <p className="empty-wishlist text-lg font-semibold mb-4">
             Your wishlist is empty.
@@ -143,4 +141,4 @@ const WishlistPage = () => {
   );
 };
 
-export default WishlistPage; // Export the component
+export default WishlistPage;
